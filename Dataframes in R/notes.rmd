@@ -1,0 +1,284 @@
+---
+output: reprex::reprex_document
+knit: reprex::reprex_render
+---
+
+# Introduction to dataframes
+
+## Dataframe creation
+
+Let's create a dummy rainy season data
+
+```{r}
+days <- c("mon", "tue", "wed", "thu", "fri", "sat", "sun")
+temp <- c(12, 13, 11, 10.5, 14, 10, 13.1)
+hum <- c(80, 56, 78, 78, 45, 87, 91)
+sky <- c("sunny", "cloudy", "sunny", "cloudy", "sunny", "sunny", "cloudy")
+
+df <- data.frame(days, temp, hum, sky)
+df
+```
+
+## Details of a Dataframe
+
+We can use the methods : `head()`, `summary()`, `tail()`, `ncol()`, `nrow()`, `str()`, `colnames()`, `rownames()`
+```{r}
+head(df, 2)
+
+summary(df)
+```
+
+## Dataframe access
+
+### Access dataframe columns
+You can access dataframe elements with `[`, `[[`and `$`
+
+```{r}
+df["days"] # Result is a dataframe
+
+df[["days"]] # Result is a vector
+
+df$days # Also returns a vector
+```
+
+### Access dataframe as matrix
+
+```{r}
+df[1, 2]
+df[1, ]
+df[, 2]
+
+df$days == "wed"
+df[df$days == "wed", ]
+
+
+df[df$temp > 12, ]
+
+```
+
+### Modify a dataframe
+
+We can modify a dataframe by using the `transform()` method
+
+#### With `transform()`
+```{r}
+transform(df, temp = temp + 5, hum = hum + 3)
+
+t <- c(1:7)
+transform(df, temp = t)
+
+df
+```
+
+We can see that transform don't modify the original
+dataset, it returns a modified version of it
+
+#### With `$`
+
+If we want to make permanent changes to our dataframe
+we can use the `$` operator
+
+```{r}
+df$temp <- t
+df
+```
+
+## Read data
+
+### Read csv data
+
+```{r}
+data <- read.csv("../datasets/covid-19/covid_19_data_cleaned.csv")
+typeof(data)
+class(data)
+
+
+head(data)
+colnames(data)
+summary((data))
+
+str(data)
+```
+
+### Read an excel file
+
+```{r}
+# library("xlsx")
+# read.xlsx("../datasets/covid-19/daywise.xlsx")
+```
+
+### Read an XML file
+
+```{r}
+library("XML")
+library("methods")
+
+data <- xmlParse(file = "../datasets/students.xml")
+data <- xmlToDataFrame(data)
+data
+
+data <- xmlParse(file = "../datasets/students.xml")
+root_node <- xmlRoot(data)
+root_node[1]
+```
+
+### Read a JSON file
+
+```{r}
+library("rjson")
+
+data <- fromJSON(file = "../datasets/global-temp.json")
+data <- as.data.frame(data)
+data <- t(data)
+
+str(data)
+```
+## binding
+
+### Bind rows
+
+```{r}
+library("dplyr")
+
+a <- data.frame(a = 1:4, b = 5:8, c = 9:12)
+b <- data.frame(a = 13:16, b = 17:20, c = 21: 24, d = 25: 28)
+a
+b
+```
+
+`rbind()` doesn't work when the number of columns doesn't match
+
+```{r}
+rbind(a, a)
+```
+To overcome this problem, we'll use`bind_rows()`
+
+```{r}
+bind_rows(a, b)
+```
+
+We should keep in mind that when there are no data while binding
+the default value is *NA*
+
+## Bind columns
+
+```{r}
+data <- cbind(a, b)
+data
+```
+
+The problem that surges here is that multiple columns will have the same name
+and when we'll try to access them, we'll only get the first column.
+
+The solution will be
+
+```{r}
+bind_cols(a, b)
+```
+
+## Selection and indexing in dataframes
+
+```{r}
+data <- read.csv("../datasets/covid-19/covid_19_data_cleaned.csv")
+colnames(data)
+
+head(data)
+str(data)
+
+data[2, ]
+
+# Affichage cyclique suivant les booleens
+# data[c(TRUE, FALSE)]
+
+# To apply it on row just add the ','
+
+# data[c(TRUE, FALSE), ]
+
+```
+
+### Conditionnal dataframe selection using the `subset()` function
+
+We want to select the data where country is 'US' without the subset
+
+```{r}
+head(data[data$Country == "US", ])
+```
+
+With the use of `subset()`
+
+```{r}
+head(subset(data, Country == "US"))
+```
+To extract the maximum of confirmed we can simply do
+
+```{r}
+head(subset(data, Confirmed == max(Confirmed)))
+```
+
+For the minimum reported death
+
+```{r}
+head(subset(data, Deaths == max(Deaths)))
+```
+
+Here lets say we want the rows where deaths are greater than 1 million
+
+```{r}
+head(subset(data, Deaths > 2e5))
+```
+
+## Dealing with dates
+
+Try do do it as an exercise with the package 'lubridate'
+
+
+## Export CSV file
+
+```{r}
+latest_death <- subset(data, Deaths > 2e5)
+# write.csv(latest_death, '../datasets/latest_death.csv')
+```
+
+## sorting a dataframe
+
+```{r}
+index <- order(latest_death$Deaths, decreasing = FALSE)
+head(latest_death[index, ])
+```
+
+or simply
+
+```{r}
+head(latest_death[order(latest_death$Deaths, decreasing = TRUE), ])
+```
+
+## Groupby
+
+We will workd with the `plyr` package
+
+```{r}
+library("plyr")
+df <- ddply(data, .(Date, Country), numcolwise(sum))
+head(df)
+```
+
+## Joining dataframes
+
+* **Natural join(how='inner')** : only the rows that are common in both dataframes
+
+* **Full outer join(how='outer')** : We get all the values that are in both X and Y and common to the 2
+
+
+* **Left outer join(how='left')** : All the value that are in the left dataset X and the value which are common in the right dataset
+
+
+* **Right outer join(how='right')** : All the value that are in the right dataset Y and the value which are common in the left dataset
+
+### Inner merge
+
+```{r}
+# daywise <- read.xlsx("../datasets/covid-19/daywise.xlsx", sheetIndex = 1)
+# daywise <- read.xlsx("../datasets/covid-19/covid_19_data_cleaned.csv")
+# daywise
+# df.merge.inner <- merge(df, daywise, by.x = c("Date"), by.y = c("Date"))
+```

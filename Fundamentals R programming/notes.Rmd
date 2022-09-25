@@ -1,0 +1,344 @@
+---
+output: reprex::reprex_document
+knit: reprex::reprex_render
+---
+## Variable assignment
+
+Let's demonstrate variable assignment in R
+
+```{r}
+a <- 1
+b <- 2
+c <- 3
+
+x <- a + b + c
+
+x
+ print(x)
+
+ cat(a, b, c)
+```
+
+## Arithmetic operators
+
+& is element wise
+&& is on the whole vector
+
+
+## Assignment operators
+
+```{r}
+# This is the left assignment
+a <- 10
+
+# Right assignment (Warning on it)
+# 1 -> b
+
+cat(a, b)
+```
+
+## Miscellaneous operators
+
+```{r}
+# : sequence of numbers
+# %in% if a value belongs to a vector
+# %'% matrix * t(matrix)
+
+a <- 1:10
+b <- 2
+c <- 30
+
+b %in% a
+c %in% a
+
+m1 <- matrix(c(1, 2, 3, 5, 6, 7), nrow = 2)
+
+m1 %*% t(m1)
+```
+
+## Function
+
+```{r}
+your_function <- function(param1, param2) {
+    # Function body
+    x <- (param1 * param2)
+    return(x)
+}
+
+your_function(2, 10)
+```
+
+## Data types r
+
+### Numeric data type
+
+```{r}
+a <- 12
+b <- 3.14159
+
+class(b)
+typeof(a)
+
+a <- 12L
+typeof(b)
+
+a <- 1 + 2i
+typeof(a)
+```
+
+## String manipulation
+
+Either use print(), cat(a, b) or paste(a, b) to print string elements
+
+```{r}
+a <- "Hello"
+b <- "KGP"
+c <- "Talkie from Laxmi Kant"
+
+print(c)
+
+paste(a, b, sep = "", collapse = " ")
+```
+
+## Format display
+
+```{r}
+x <- 3.141592
+y <- format(x, digits = 2)
+
+typeof(a)
+typeof(b)
+
+as.double(y)
+
+format(x, scientific = TRUE)
+```
+
+## Operators for vector creation
+
+```{r}
+a <- "kgp"
+x <- 1:10
+x
+seq(1, 10)
+
+# ?seq()
+
+seq(1, 10, .1)
+
+c("apple", "kgp", "talkie", 1, 3)
+```
+
+## Using [] operators to access vector elements
+
+```{r}
+# Unlike python or other traditionnal languages, the index starts
+# at 1 in R
+a[1]
+
+a[c(1, 2)]
+
+# We put "kgp" to FALSE so that it's not printed
+# and it's repetitive following the boolean order
+a[c(TRUE, FALSE)]
+```
+## Vectors
+
+### Vector manipulation
+
+```{r}
+a <- 1:10
+b <- seq(10, 1, -1)
+# Arithmetic perfroms element-wise
+a + b
+a - b
+a * b
+a / b
+```
+
+### Vector recycling
+
+```{r}
+c <- 1:2
+a
+c
+
+a + c
+a - c
+a * c
+a / c
+```
+
+### Sorting
+
+```{r}
+sort((a / c), decreasing = TRUE)
+```
+
+## List R
+
+## Simple list creation
+```{r}
+c("kgp", "talkie", 1)
+x <- list("kgp", "talkie", 1, 1.12, 11, TRUE)
+
+x[5]
+```
+
+### Named list
+
+```{r}
+x <- list("kgp", "talkie", 1, TRUE)
+names(x) <- c("string1", "string2", "numeric", "boolean")
+
+x$string1
+x$numeric
+```
+
+### List manipulation and merging
+
+```{r}
+x$string1 <- "KGP"
+x$numeric <- 10
+
+x$boolean <- a
+x <- list(a, c, 1, TRUE)
+names(x) <- c("string1", "string2", "numeric", "boolean")
+x
+
+# Merging
+x <- list("one", "two", "three")
+y <- list(1, 2, 3)
+
+z <- c(x, y)
+z
+```
+
+### Conversion list to vector
+
+R programming only works with matrices and vectors
+
+```{r}
+x <- list(1, 2, 3)
+y <- list(1, 4, 9)
+
+# z <- x * y
+# this will produce and error : Non numeric argument ot binary operator
+# to do it
+
+z <- unlist(x)*unlist(y)
+z
+z <- as.list(z)
+# and we have again a list
+z
+```
+
+## Matrix
+
+```{r}
+a <- c(1, 2, 3, 4, 5, 6)
+x <- matrix(a)
+# The result is a column matrix
+x
+
+# To have it by row
+x <- matrix(a, byrow = FALSE)
+x
+
+# by default its size is the number of rows
+x <- matrix(a, nrow = 2, byrow = FALSE)
+x
+
+x <- matrix(a, nrow = 2, byrow = TRUE)
+x
+```
+### Matrix operations
+
+```{r}
+a <- matrix(c(1:10), nrow = 3)
+b <- matrix(seq(1, 80, 7), nrow = 3)
+
+a
+b
+
+a[1, 2] # Row 1 column 2
+
+a[1, ] # Whole row 1
+
+b[, 2] # Whole column 2
+```
+
+Let's do some basic operations
+
+```{r}
+a + 1
+
+a + b
+a - b
+a * b
+
+```
+
+## Arrays r 
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(4, 5, 5)
+z <- array(c(a, b), c(2, 3, 1))
+z
+```
+Let's add more complexities to our Arrays
+
+```{r}
+a <- c(1:9) # 9
+b <- c(1, 4, 9, 16, 25, 36, 49, 64, 81) # 9
+
+z <- array(c(a, b))
+z # This is a 1D array
+
+# Lets convert it to multiple dimensions
+z <- array(c(a, b), c(3, 3, 2))
+z
+```
+
+### Name of columns
+
+```{r}
+cols <- c("col1", "col2", "col3")
+rows <- c("row1", "row2", "row3")
+mats <- c("matrix1", "matrix2")
+
+z <- array(c(a, b), c(3, 3, 2), dimnames = list(rows, cols, mats))
+z
+
+z[1]
+
+# Value from 3rd row, all columns and 2nd matrix
+z[3, , 2]
+
+# For all columns and all matrices
+z[3, , ]
+```
+
+## Factors in R
+Factors are the data objects which are used to categorize
+the data and store it as levels. They can store both strings and integers
+
+```{r}
+names <- c("sun", "mon", "tue", "sun", "mon", "fri", "mon")
+is.factor(names)
+is.vector(names)
+
+l <- factor(names)
+is.factor(l)
+
+l
+
+factor(l, levels = c("sun", "mon", "tue", "fri"))
+```
+
+Another method to create factor with gl
+
+```{r}
+gl(3, 4, labels = c("sun", "mon", "tue", "fri"), ordered = TRUE)
+```

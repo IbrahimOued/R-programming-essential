@@ -1,0 +1,64 @@
+---
+output: reprex::reprex_document
+knit: reprex::reprex_render
+---
+
+
+## Data visualization with ggplot2
+
+### Load the dataset
+
+```{r}
+data <- read.csv("../datasets/covid-19/covid_19_data_cleaned.csv")
+head(data)
+```
+
+Structure of the data
+
+```{r}
+library("lubridate")
+data$Date <- mdy(data$Date)
+str(data)
+us <- subset(data, Country == "US")
+latest <- subset(data, Date == max(Date))
+latest <- latest[order(latest$Confirmed, decreasing = TRUE), ]
+latest[1:10, ]
+```
+
+```{r}
+library("plyr")
+data <- ddply(data, .(Date, Country), numcolwise(sum))
+str(data)
+```
+
+```{r}
+data <- within(data, rm(Lat, Long))
+str(data)
+```
+
+```{r}
+subset(data, Country == "US")
+```
+
+```{r}
+order(data$Confirmed, Country == "US")
+```
+
+```{r}
+data[order(data$Confirmed, decreasing = TRUE), ]
+```
+
+## Bar plot || Top 10 worst hit countries
+
+The general syntax of ggplot2 is
+
+```r
+ggplot(dataset, aes(xaxis, yaxis)) +
+geom_something() +
+geom_somethingElse()
+```
+
+
+```{r}
+# ggplot(top10) 
+```

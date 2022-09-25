@@ -1,0 +1,32 @@
+<RECORDS> 
+<STUDENT> 
+   <ID>1</ID> 
+   <NAME>W Bush</NAME> 
+   <MARKS>620</MARKS> 
+   <BRANCH>IT</BRANCH> 
+</STUDENT> 
+<STUDENT> 
+   <ID>2</ID> 
+   <NAME>T. K. Smith</NAME> 
+   <MARKS>440</MARKS> 
+   <BRANCH>Data Science</BRANCH> 
+</STUDENT> 
+<STUDENT> 
+   <ID>3</ID> 
+   <NAME>Yash Raj</NAME> 
+   <MARKS>600</MARKS> 
+   <BRANCH>Science</BRANCH> 
+</STUDENT> 
+<STUDENT> 
+   <ID>4</ID> 
+   <NAME>Mallika</NAME> 
+   <MARKS>660</MARKS> 
+   <BRANCH>CSE</BRANCH> 
+</STUDENT> 
+<STUDENT> 
+   <ID>5</ID> 
+   <NAME>Zayn</NAME> 
+   <MARKS>560</MARKS> 
+   <BRANCH>CSE</BRANCH> 
+</STUDENT> 
+</RECORDS> 
